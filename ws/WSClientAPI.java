@@ -155,5 +155,37 @@ public class WSClientAPI
 
 		return(response.toString());
 		
-    } // newOrder
+    } 
+	
+	/********************************************************************************
+	* Description: Delets order by order id
+	* Parameters: None
+	* Returns: Delete order sucess
+	********************************************************************************/
+	public String deleteOrder(String orderId) throws Exception
+    {
+        // Set up the URL and open connection to the node server
+        String url = "http://localhost:3000/api/orders/" + orderId;
+        URL obj = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        
+        // Configure the connection for DELETE
+        con.setRequestMethod("DELETE");
+        int responseCode = con.getResponseCode();
+
+        // Read the response
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+
+        while ((inputLine = in.readLine()) != null) 
+        {
+            response.append(inputLine);
+        }
+        in.close();
+        con.disconnect();
+
+        return response.toString();
+    }
+
 } // WSClientAPI
