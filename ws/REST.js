@@ -26,6 +26,7 @@
 ******************************************************************************************************************/
 
 var mysql   = require("mysql");     //Database
+const logger = require("./Logger");
 
 function REST_ROUTER(router,connection) {
     var self = this;
@@ -50,14 +51,17 @@ REST_ROUTER.prototype.handleRoutes= function(router,connection) {
     // res parameter is the response object
   
     router.get("/orders",function(req,res){
+        const username = req.query.username || "anonymous";
         console.log("Getting all database entries..." );
         var query = "SELECT * FROM ??";
         var table = ["orders"];
         query = mysql.format(query,table);
         connection.query(query,function(err,rows){
             if(err) {
+                logger.logAction(username, "GET_ALL_ORDERS", false);
                 res.json({"Error" : true, "Message" : "Error executing MySQL query"});
             } else {
+                logger.logAction(username, "GET_ALL_ORDERS", true);
                 res.json({"Error" : false, "Message" : "Success", "Orders" : rows});
             }
         });
@@ -68,14 +72,17 @@ REST_ROUTER.prototype.handleRoutes= function(router,connection) {
     // res parameter is the response object
      
     router.get("/orders/:order_id",function(req,res){
+        const username = req.query.username || "anonymous";
         console.log("Getting order ID: ", req.params.order_id );
         var query = "SELECT * FROM ?? WHERE ??=?";
         var table = ["orders","order_id",req.params.order_id];
         query = mysql.format(query,table);
         connection.query(query,function(err,rows){
             if(err) {
+                logger.logAction(username, "GET_ORDER_BY_ID", false);
                 res.json({"Error" : true, "Message" : "Error executing MySQL query"});
             } else {
+                logger.logAction(username, "GET_ORDER_BY_ID", true);
                 res.json({"Error" : false, "Message" : "Success", "Users" : rows});
             }
         });
@@ -86,6 +93,7 @@ REST_ROUTER.prototype.handleRoutes= function(router,connection) {
     // res parameter is the response object 
   
     router.post("/orders",function(req,res){
+        const username = req.query.username || "anonymous";
         //console.log("url:", req.url);
         //console.log("body:", req.body);
         console.log("Adding to orders table ", req.body.order_date,",",req.body.first_name,",",req.body.last_name,",",req.body.address,",",req.body.phone);
@@ -94,8 +102,10 @@ REST_ROUTER.prototype.handleRoutes= function(router,connection) {
         query = mysql.format(query,table);
         connection.query(query,function(err,rows){
             if(err) {
+                logger.logAction(username, "CREATE_ORDER", false);
                 res.json({"Error" : true, "Message" : "Error executing MySQL query"});
             } else {
+                logger.logAction(username, "CREATE_ORDER", true);
                 res.json({"Error" : false, "Message" : "User Added !"});
             }
         });
