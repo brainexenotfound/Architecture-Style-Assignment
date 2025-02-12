@@ -26,7 +26,7 @@
 ******************************************************************************************************************/
 
 var mysql   = require("mysql");     //Database
-const logger = require("./Logger");
+const logger = require("./Logger.js");
 
 function REST_ROUTER(router,connection) {
     var self = this;
