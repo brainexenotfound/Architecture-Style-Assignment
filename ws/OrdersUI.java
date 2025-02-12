@@ -49,29 +49,7 @@ public class OrdersUI
 		// Main UI loop
 		/////////////////////////////////////////////////////////////////////////////////
 
-		boolean authenticated = false;
-		int count = 3;
-
-		while (!authenticated && count > 0) {
-			System.out.println("Enter your username: ");
-			String username = keyboard.nextLine();
-			System.out.println("Enter your password: ");
-			String password = new String(c.readPassword());
-
-			if (authenticated = username.equals("admin") && password.equals("password")) {
-				System.out.println("Login successful.\n");
-				authenticated = true;
-			} else {
-				count--;
-				System.out.println("Invalid credentials, remaining tries: \n" + count);
-			} if (count == 0) {
-				System.out.println("Too many failed attempts. Exiting...");
-				System.exit(0);
-			}
-			
-		}
-
-		while (!done && authenticated)
+		while (!done)
 		{	
 			// Here, is the main menu set of choices
 			System.out.println( "\n\n\n\n" );
