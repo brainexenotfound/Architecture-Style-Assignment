@@ -109,33 +109,8 @@ public class DeleteServices extends UnicastRemoteObject implements DeleteService
             // I used a while loop should there every be a case where there might be multiple
             // orders for a single ID.
 
-            /*while(rs.next())
-            {
-                //Delete by column name
-                int id  = rs.getInt("order_id");
-                String date = rs.getString("order_date");
-                String first = rs.getString("first_name");
-                String last = rs.getString("last_name");
-                String address = rs.getString("address");
-                String phone = rs.getString("phone");
-
-                //Display values
-                //System.out.print("ID: " + id);
-                //System.out.print(", date: " + date);
-                //System.out.print(", first: " + first);
-                //System.out.print(", last: " + last);
-                //System.out.print(", address: " + address);
-                //System.out.println("phone:"+phone);
-
-                ReturnString = ReturnString +"{order_id:"+id+", order_date:"+date+", first_name:"+first+", last_name:"
-                               +last+", address:"+address+", phone:"+phone+"}";
-            }
-
-            ReturnString = ReturnString +"]";
-
             //Clean-up environment
 
-            rs.close();*/
             stmt.close();
             conn.close();
             stmt.close(); 
