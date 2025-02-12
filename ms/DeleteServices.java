@@ -40,7 +40,7 @@ public class DeleteServices extends UnicastRemoteObject implements DeleteService
     // Main service loop
     public static void main(String args[]) 
     { 	
-    	// What we do is bind to rmiregistry, in this case localhost, port 1099. This is the default
+    	// What we do is bind to rmiregistry, in this case localhost, port 1097. This is the default
     	// RMI port. Note that I use rebind rather than bind. This is better as it lets you start
     	// and restart without having to shut down the rmiregistry. 
 
@@ -100,7 +100,7 @@ public class DeleteServices extends UnicastRemoteObject implements DeleteService
             stmt = conn.createStatement();
             
             String sql;
-            sql = "DELETE * FROM orders where order_id=" + orderid;
+            sql = "DELETE FROM orders where order_id=" + orderid;
             ResultSet rs = stmt.executeQuery(sql);
 
             // Extract data from result set. Note there should only be one for this method.

@@ -104,7 +104,7 @@ public class MSClientAPI
 		   String port = entry.split(":")[1];
 		   // Get the RMI registry
 		   Registry reg = LocateRegistry.getRegistry(host, Integer.parseInt(port));
-		   DeleteServicesAI obj = (DeleteServicesAI )reg.lookup("DeleteServices");
+		   DeleteServicesAI obj = (DeleteServicesAI)reg.lookup("DeleteServices");
            response = obj.deleteOrder(id);
            return(response);	
 	}	
