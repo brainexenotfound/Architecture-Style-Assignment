@@ -49,7 +49,7 @@ public class DeleteServices extends UnicastRemoteObject implements DeleteService
             DeleteServices obj = new DeleteServices();
 
             Registry registry = Configuration.createRegistry();
-            registry.bind("DeleteServices", obj);
+            registry.rebind("DeleteServices", obj);
 
             String[] boundNames = registry.list();
             System.out.println("Registered services:");
@@ -101,13 +101,15 @@ public class DeleteServices extends UnicastRemoteObject implements DeleteService
             
             String sql;
             sql = "DELETE FROM orders where order_id=" + orderid;
-            ResultSet rs = stmt.executeQuery(sql);
+            // execute the update
+            stmt.executeUpdate(sql);
+            //ResultSet rs = stmt.executeQuery(sql);
 
             // Extract data from result set. Note there should only be one for this method.
             // I used a while loop should there every be a case where there might be multiple
             // orders for a single ID.
 
-            while(rs.next())
+            /*while(rs.next())
             {
                 //Delete by column name
                 int id  = rs.getInt("order_id");
@@ -133,7 +135,7 @@ public class DeleteServices extends UnicastRemoteObject implements DeleteService
 
             //Clean-up environment
 
-            rs.close();
+            rs.close();*/
             stmt.close();
             conn.close();
             stmt.close(); 

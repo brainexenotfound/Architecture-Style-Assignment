@@ -40,7 +40,7 @@ services:
     container_name: ms_delete
     build:
       context: .
-      dockerfile: Dockerfile-rs
+      dockerfile: Dockerfile-ds
       args:
         MYSQL_PASSWORD: test
     depends_on:
