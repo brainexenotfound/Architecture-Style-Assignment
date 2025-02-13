@@ -23,32 +23,46 @@
 import java.io.IOException;
 import java.rmi.RemoteException; 
 import java.rmi.server.UnicastRemoteObject;
-// import java.rmi.registry.Registry;
+import java.rmi.registry.Registry;
 import java.util.logging.*;
-// import java.sql.*;
+import java.sql.*;
 
 public class LoggingServices extends UnicastRemoteObject implements LoggingServicesAI
 { 
-    // Set up the JDBC driver name and database URL
-    // static final String JDBC_CONNECTOR = "com.mysql.jdbc.Driver";  
-    // static final String DB_URL = Configuration.getJDBCConnection();
-
-    // // Set up the orderinfo database credentials
-    // static final String USER = "root";
-    // static final String PASS = Configuration.MYSQL_PASSWORD;
 
     private static final Logger logger = Logger.getLogger(LoggingServices.class.getName());
     
     // constructor
-    protected LoggingServices() throws RemoteException {
+    public LoggingServices() throws RemoteException {
         super();
         try {
-            FileHandler fileHandler = new FileHandler("/usr/app/remote_app.log", true);
+            FileHandler fileHandler = new FileHandler("/usr/logging/remote_app.log", true);
             fileHandler.setFormatter(new SimpleFormatter());
             logger.addHandler(fileHandler);
             logger.setLevel(Level.ALL);
+            logger.info("Here we go again.");
         } catch (IOException e) {
             System.err.println("Failed to start logger: " + e.getMessage());
+        }
+    }
+
+    public static void main(String[] args) {
+        try {            
+            LoggingServices obj = new LoggingServices();
+
+            Registry registry = Configuration.createRegistry();
+            registry.bind("LoggingServices", obj);
+
+            System.out.println("Logger service started on port 1097, waiting for clients...");
+
+            String[] boundNames = registry.list();
+            System.out.println("Registered services:");
+            for (String name : boundNames) {
+                System.out.println("\t" + name);
+            }
+        } catch (Exception e) {
+            System.err.println("Logger server failed: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
