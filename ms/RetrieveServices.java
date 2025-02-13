@@ -23,6 +23,8 @@
 import java.rmi.RemoteException; 
 import java.rmi.server.UnicastRemoteObject;
 import java.rmi.registry.Registry;
+import java.rmi.registry.LocateRegistry;
+import java.util.logging.Level;
 import java.sql.*;
 
 public class RetrieveServices extends UnicastRemoteObject implements RetrieveServicesAI
@@ -46,11 +48,14 @@ public class RetrieveServices extends UnicastRemoteObject implements RetrieveSer
     	// and restart without having to shut down the rmiregistry. 
 
         try 
-        { 
+        {         
             RetrieveServices obj = new RetrieveServices();
 
             Registry registry = Configuration.createRegistry();
             registry.bind("RetrieveServices", obj);
+            LoggingServicesAI logger = (LoggingServicesAI) registry.lookup("LoggingService");
+            logger.log(Level.INFO, "Retrieve services started processessing request.");
+            logger.log(Level.SEVERE, "Retreive services encounted a critical error!");
 
             String[] boundNames = registry.list();
             System.out.println("Registered services:");
@@ -59,7 +64,7 @@ public class RetrieveServices extends UnicastRemoteObject implements RetrieveSer
             }
 
         } catch (Exception e) {
-
+            System.err.println("Failed to log Retreive Services remotely: " + e.getMessage());
             System.out.println("RetrieveServices binding err: " + e.getMessage()); 
             e.printStackTrace();
         } 
