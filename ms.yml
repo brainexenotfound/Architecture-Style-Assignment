@@ -9,6 +9,7 @@ services:
         MYSQL_PASSWORD: silkcode
     depends_on:
       - mysql
+      - logging
     environment:
       RMI_REMOTE_HOST: ms_create
       RMI_REMOTE_PORT: 1099
@@ -27,11 +28,24 @@ services:
         MYSQL_PASSWORD: silkcode
     depends_on:
       - mysql
+      - logging
     environment:
       RMI_REMOTE_HOST: ms_retrieve
       RMI_REMOTE_PORT: 1098
       MYSQL_REMOTE_HOST: ms_mysql
       MYSQL_REMOTE_PORT: 3306
+    networks:
+      - ms
+      
+  logging:
+    image: ms_logging
+    container_name: ms_logging
+    build:
+      context: .
+      dockerfile: Dockerfile-ls
+    environment:
+      RMI_REMOTE_HOST: ms_logging
+      RMI_REMOTE_PORT: 1097
     networks:
       - ms
 

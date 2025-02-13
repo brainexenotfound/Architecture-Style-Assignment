@@ -45,21 +45,21 @@ public class MSClientAPI
 		  registry = new Properties();
 		  registry.load(new FileReader("registry.properties"));
 
-		  try {
-			String logPath = "/usr/app/api_logs.txt";
-			File logFile = new File(logPath);
-			if (!logFile.exists()) {
-				logFile.getParentFile().mkdirs();
-				logFile.createNewFile();
-				System.out.println("log file created at: " + logFile.getAbsolutePath());
-			}
-			FileHandler fileHandler = new FileHandler(logPath, true);
-			fileHandler.setFormatter(new SimpleFormatter());
-			logger.addHandler(fileHandler);
-			} catch (IOException e) {
+		//   try {
+		// 	String logPath = "/usr/app/api_logs.txt";
+		// 	File logFile = new File(logPath);
+		// 	if (!logFile.exists()) {
+		// 		logFile.getParentFile().mkdirs();
+		// 		logFile.createNewFile();
+		// 		System.out.println("log file created at: " + logFile.getAbsolutePath());
+		// 	}
+		// 	FileHandler fileHandler = new FileHandler(logPath, true);
+		// 	fileHandler.setFormatter(new SimpleFormatter());
+		// 	logger.addHandler(fileHandler);
+		// 	} catch (IOException e) {
 			
-			e.printStackTrace();
-			}
+		// 	e.printStackTrace();
+		// 	}
 	}
 
 	/********************************************************************************

@@ -50,19 +50,13 @@ public class RetrieveServices extends UnicastRemoteObject implements RetrieveSer
         try 
         {         
             RetrieveServices obj = new RetrieveServices();
-
             Registry registry = Configuration.createRegistry();
             registry.bind("RetrieveServices", obj);
-            LoggingServicesAI logger = (LoggingServicesAI) registry.lookup("LoggingService");
-            logger.log(Level.INFO, "Retrieve services started processessing request.");
-            logger.log(Level.SEVERE, "Retreive services encounted a critical error!");
-
             String[] boundNames = registry.list();
             System.out.println("Registered services:");
             for (String name : boundNames) {
                 System.out.println("\t" + name);
             }
-
         } catch (Exception e) {
             System.err.println("Failed to log Retreive Services remotely: " + e.getMessage());
             System.out.println("RetrieveServices binding err: " + e.getMessage()); 
@@ -88,6 +82,10 @@ public class RetrieveServices extends UnicastRemoteObject implements RetrieveSer
         {
             // Here we load and initialize the JDBC connector. Essentially a static class
             // that is used to provide access to the database from inside this class.
+
+            Registry loggingRegistry = LocateRegistry.getRegistry("ms_logging", 1097);
+            LoggingServicesAI logger = (LoggingServicesAI) loggingRegistry.lookup("LoggingServices");
+            logger.log(Level.INFO, "Retrieve services started processessing request.");
 
             Class.forName(JDBC_CONNECTOR);
 
