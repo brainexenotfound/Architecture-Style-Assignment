@@ -39,7 +39,7 @@ public class LoggingServices extends UnicastRemoteObject implements LoggingServi
             // NOTE: The file is written to usr/logging directory and not the project
             // working directory usr/app.
             // REF: https://docs.oracle.com/javase/8/docs/api/java/util/logging/FileHandler.html#FileHandler-java.lang.String-boolean-
-            FileHandler fileHandler = new FileHandler("/usr/logging/remote_app.log", true);
+            FileHandler fileHandler = new FileHandler("/usr/logging/log.txt", true);
             fileHandler.setFormatter(new SimpleFormatter());
             logger.addHandler(fileHandler);
             // Level set to ALL to capture all messages.
