@@ -71,8 +71,12 @@ public class RetrieveServices extends UnicastRemoteObject implements RetrieveSer
 
     // This method will return all the entries in the orderinfo database
 
-    public String retrieveOrders() throws RemoteException, NotBoundException
+    public String retrieveOrders(String authToken) throws RemoteException, NotBoundException
     {
+        String username = TokenVerification.verifyToken(authToken);
+        if (username == null) {
+            return "Invalid token";
+        }
       	// Local declarations
 
         Connection conn = null;		// connection to the orderinfo database
@@ -155,8 +159,12 @@ public class RetrieveServices extends UnicastRemoteObject implements RetrieveSer
     // This method will returns the order in the orderinfo database corresponding to the id
     // provided in the argument.
 
-    public String retrieveOrders(String orderid) throws RemoteException, NotBoundException
+    public String retrieveOrders(String orderid, String authToken) throws RemoteException, NotBoundException
     {
+        String username = TokenVerification.verifyToken(authToken);
+        if (username == null) {
+            return "Invalid token";
+        }
       	// Local declarations
 
         Connection conn = null;		// connection to the orderinfo database

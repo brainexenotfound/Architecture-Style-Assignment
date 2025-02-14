@@ -30,6 +30,7 @@ public class MSClientAPI
 {
 	String response = null;
 	Properties registry = null;
+	String authToken = null;
 
 	public MSClientAPI() throws IOException {
 		  // Loads the registry from 'registry.properties'
@@ -58,7 +59,7 @@ public class MSClientAPI
 		   // Get the RMI registry
 		   Registry reg = LocateRegistry.getRegistry(host, Integer.parseInt(port));
 		   RetrieveServicesAI obj = (RetrieveServicesAI )reg.lookup("RetrieveServices");
-		   response = obj.retrieveOrders();
+		   response = obj.retrieveOrders(authToken);
 		   return response;
 	}
 	
@@ -80,7 +81,7 @@ public class MSClientAPI
 		   // Get the RMI registry
 		   Registry reg = LocateRegistry.getRegistry(host, Integer.parseInt(port));
 		   RetrieveServicesAI obj = (RetrieveServicesAI )reg.lookup("RetrieveServices");
-           response = obj.retrieveOrders(id);
+           response = obj.retrieveOrders(id, authToken);
            return(response);	
 
 	}
@@ -159,6 +160,9 @@ public class MSClientAPI
 		   Registry reg = LocateRegistry.getRegistry(host, Integer.parseInt(port));
 		   AuthServicesAI obj = (AuthServicesAI) reg.lookup("AuthServices");
 		   response = obj.auth(Username, Password);
+		   if (response.startsWith("Token:")) {
+			   authToken = response;
+		   }
 		   return response;
 	}
 }
