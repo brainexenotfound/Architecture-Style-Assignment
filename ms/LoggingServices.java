@@ -1,24 +1,21 @@
 /******************************************************************************************************************
-* File: RetrieveServices.java
+* File: LoggingServices.java
 * Course: 17655
 * Project: Assignment A3
 * Copyright: Copyright (c) 2018 Carnegie Mellon University
 * Versions:
 *	1.0 February 2018 - Initial write of assignment 3 (ajl).
 *
-* Description: This class provides the concrete implementation of the retrieve micro services. These services run
-* in their own process (JVM).
-*
+* Description: This class provides the concrete implementation of the logging micro services. 
+* This service runs with the Java RMI library.
 * Parameters: None
 *
 * Internal Methods:
-*  String retrieveOrders() - gets and returns all the orders in the orderinfo database
-*  String retrieveOrders(String id) - gets and returns the order associated with the order id
+*  void log(Level level, String message, String userId) - logging method for microservices to call the logging service with
 *
 * External Dependencies: 
 *	- rmiregistry must be running to start this server
-*	= MySQL
-	- orderinfo database 
+*   - this service needs to start before any of the other services
 ******************************************************************************************************************/
 import java.io.IOException;
 import java.rmi.RemoteException; 
@@ -30,17 +27,24 @@ import java.sql.*;
 public class LoggingServices extends UnicastRemoteObject implements LoggingServicesAI
 { 
 
+    // Concrete implementation of logger using class to identify logger.
     private static final Logger logger = Logger.getLogger(LoggingServices.class.getName());
     
     // constructor
     public LoggingServices() throws RemoteException {
         super();
         try {
+            // This block creates a FileHandler instance that will write to the 
+            // specified remote_app.log file in the usr/logging directory with option to append. 
+            // NOTE: The file is written to usr/logging directory and not the project
+            // working directory usr/app.
+            // REF: https://docs.oracle.com/javase/8/docs/api/java/util/logging/FileHandler.html#FileHandler-java.lang.String-boolean-
             FileHandler fileHandler = new FileHandler("/usr/logging/remote_app.log", true);
             fileHandler.setFormatter(new SimpleFormatter());
             logger.addHandler(fileHandler);
+            // Level set to ALL to capture all messages.
             logger.setLevel(Level.ALL);
-            logger.info("Here we go again.");
+            logger.info("LoggingServices successfully started.");
         } catch (IOException e) {
             System.err.println("Failed to start logger: " + e.getMessage());
         }

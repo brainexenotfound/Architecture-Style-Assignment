@@ -80,6 +80,8 @@ public class RetrieveServices extends UnicastRemoteObject implements RetrieveSer
         String ReturnString = "[";	// Return string. If everything works you get an ordered pair of data
         							// if not you get an error string
 
+        // Here we initialize a reference to the remote logging service, 
+        // we connect to the RMI registry and lookup the LoggingServices
         Registry loggingRegistry = LocateRegistry.getRegistry("ms_logging", 1096);
         LoggingServicesAI logger = (LoggingServicesAI) loggingRegistry.lookup("LoggingServices");
         
