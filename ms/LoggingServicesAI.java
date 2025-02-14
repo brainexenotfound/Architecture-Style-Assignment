@@ -35,6 +35,6 @@ public interface LoggingServicesAI extends java.rmi.Remote
 	* format.
 	*******************************************************/
 
-	void log(Level level, String message) throws RemoteException;
+	void log(Level level, String message, String userId) throws RemoteException;
 
 }

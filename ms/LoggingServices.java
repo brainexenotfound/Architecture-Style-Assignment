@@ -67,7 +67,8 @@ public class LoggingServices extends UnicastRemoteObject implements LoggingServi
     }
 
     @Override
-    public void log(Level level, String message) {
+    public void log(Level level, String message, String userId) {
+        message += "user: " + userId;
         logger.log(level, message);
     }
 }

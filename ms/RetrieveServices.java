@@ -78,14 +78,14 @@ public class RetrieveServices extends UnicastRemoteObject implements RetrieveSer
         Statement stmt = null;		// A Statement object is an interface that represents a SQL statement.
         String ReturnString = "[";	// Return string. If everything works you get an ordered pair of data
         							// if not you get an error string
+
+        Registry loggingRegistry = LocateRegistry.getRegistry("ms_logging", 1097);
+        LoggingServicesAI logger = (LoggingServicesAI) loggingRegistry.lookup("LoggingServices");
         try
         {
             // Here we load and initialize the JDBC connector. Essentially a static class
             // that is used to provide access to the database from inside this class.
-
-            Registry loggingRegistry = LocateRegistry.getRegistry("ms_logging", 1097);
-            LoggingServicesAI logger = (LoggingServicesAI) loggingRegistry.lookup("LoggingServices");
-            logger.log(Level.INFO, "Retrieve services started processessing request.");
+            logger.log(Level.INFO, "method retreiveorders() called by TODO: user", "TODO");
 
             Class.forName(JDBC_CONNECTOR);
 
@@ -141,7 +141,7 @@ public class RetrieveServices extends UnicastRemoteObject implements RetrieveSer
             conn.close();
 
         } catch(Exception e) {
-
+            logger.log(Level.SEVERE, "Method call by TODO: user retreiveOrders() exception. Error message: " + e.toString(), "TODO");
             ReturnString = e.toString();
         } 
         
@@ -161,8 +161,12 @@ public class RetrieveServices extends UnicastRemoteObject implements RetrieveSer
         String ReturnString = "[";	// Return string. If everything works you get an ordered pair of data
         							// if not you get an error string
 
+        Registry loggingRegistry = LocateRegistry.getRegistry("ms_logging", 1097);
+        LoggingServicesAI logger = (LoggingServicesAI) loggingRegistry.lookup("LoggingServices");
+
         try
         {
+            logger.log(Level.INFO, String.format("method retreiveorders(%s)", orderid), "TODO");
             // Here we load and initialize the JDBC connector. Essentially a static class
             // that is used to provide access to the database from inside this class.
 
@@ -221,9 +225,8 @@ public class RetrieveServices extends UnicastRemoteObject implements RetrieveSer
             conn.close();
 
         } catch(Exception e) {
-
+            logger.log(Level.SEVERE, String.format("Method retreiveorders(%s) exception. Error message : %s", orderid, e.toString()), "TODO");
             ReturnString = e.toString();
-
         } 
 
         return(ReturnString);

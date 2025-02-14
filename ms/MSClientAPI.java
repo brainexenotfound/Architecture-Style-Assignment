@@ -21,20 +21,15 @@
 * External Dependencies: None
 ******************************************************************************************************************/
 import java.util.Properties;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.logging.Logger;
-import java.util.logging.FileHandler;
-import java.util.logging.SimpleFormatter;
 
 public class MSClientAPI
 {
 	String response = null;
 	Properties registry = null;
-	private static Logger logger = Logger.getLogger("MSClientAPILogger");
 
 	public MSClientAPI() throws IOException {
 		  // Loads the registry from 'registry.properties'
@@ -44,22 +39,6 @@ public class MSClientAPI
 		  // an RMI registry at host on port
 		  registry = new Properties();
 		  registry.load(new FileReader("registry.properties"));
-
-		//   try {
-		// 	String logPath = "/usr/app/api_logs.txt";
-		// 	File logFile = new File(logPath);
-		// 	if (!logFile.exists()) {
-		// 		logFile.getParentFile().mkdirs();
-		// 		logFile.createNewFile();
-		// 		System.out.println("log file created at: " + logFile.getAbsolutePath());
-		// 	}
-		// 	FileHandler fileHandler = new FileHandler(logPath, true);
-		// 	fileHandler.setFormatter(new SimpleFormatter());
-		// 	logger.addHandler(fileHandler);
-		// 	} catch (IOException e) {
-			
-		// 	e.printStackTrace();
-		// 	}
 	}
 
 	/********************************************************************************
@@ -72,7 +51,6 @@ public class MSClientAPI
 
 	public String retrieveOrders() throws Exception
 	{
-		   logger.info("retrieveOrders() called");
 		   // Get the registry entry for RetrieveServices service
 		   String entry = registry.getProperty("RetrieveServices");
 		   String host = entry.split(":")[0];
@@ -81,8 +59,6 @@ public class MSClientAPI
 		   Registry reg = LocateRegistry.getRegistry(host, Integer.parseInt(port));
 		   RetrieveServicesAI obj = (RetrieveServicesAI )reg.lookup("RetrieveServices");
 		   response = obj.retrieveOrders();
-
-		   logger.info("retrieveOrders() response: " + response);
 		   return response;
 	}
 	
@@ -97,7 +73,6 @@ public class MSClientAPI
 
 	public String retrieveOrders(String id) throws Exception
 	{
-		   logger.info("retrieveOrders() called with ID: " + id);   
 		// Get the registry entry for RetrieveServices service
 		   String entry = registry.getProperty("RetrieveServices");
 		   String host = entry.split(":")[0];
@@ -106,7 +81,6 @@ public class MSClientAPI
 		   Registry reg = LocateRegistry.getRegistry(host, Integer.parseInt(port));
 		   RetrieveServicesAI obj = (RetrieveServicesAI )reg.lookup("RetrieveServices");
            response = obj.retrieveOrders(id);
-		   logger.info(String.format("retrieveOrders() called with ID: %s response: " + response, id));
            return(response);	
 
 	}
@@ -119,7 +93,6 @@ public class MSClientAPI
 
    	public String newOrder(String Date, String FirstName, String LastName, String Address, String Phone) throws Exception
 	{
-		   logger.info(String.format("newOrder() called with Date: %s, First Name: %s, Last Name: %s, Address: %s, Phone: %s", Date, FirstName, LastName, Address, Phone));
 		// Get the registry entry for CreateServices service
 		   String entry = registry.getProperty("CreateServices");
 		   String host = entry.split(":")[0];
@@ -128,7 +101,6 @@ public class MSClientAPI
 		   Registry reg = LocateRegistry.getRegistry(host, Integer.parseInt(port));
            CreateServicesAI obj = (CreateServicesAI) reg.lookup("CreateServices"); 
            response = obj.newOrder(Date, FirstName, LastName, Address, Phone);
-		   logger.info(String.format("newOrder() for %s response: " + response, FirstName));
            return(response);	
     }
 
