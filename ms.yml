@@ -65,6 +65,8 @@ services:
       RMI_REMOTE_PORT: 1097
       MYSQL_REMOTE_HOST: ms_mysql
       MYSQL_REMOTE_PORT: 3306
+    networks:
+      - ms
   
   auth:
     image: ms_auth
