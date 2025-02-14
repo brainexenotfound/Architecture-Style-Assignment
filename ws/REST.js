@@ -29,6 +29,7 @@ var mysql   = require("mysql");     //Database
 
 function REST_ROUTER(router,connection) {
     var self = this;
+    self.sessions = {};
     self.handleRoutes(router,connection);
 }
 
@@ -36,12 +37,55 @@ function REST_ROUTER(router,connection) {
 // contents of the URL
 
 REST_ROUTER.prototype.handleRoutes= function(router,connection) {
-
+    let self = this;
     // GET with no specifier - returns system version information
     // req paramdter is the request object
     // res parameter is the response object
 
-    router.get("/",function(req,res){
+    function generateToken() {
+        return (Math.random().toString(36).substr(2) + Date.now().toString(36));
+    }
+
+    router.post("/accout", function (req, res) {
+        var username = req.body.username;
+        var password = req.body.password;
+
+        var SQL = "INSERT INTO accounts (username, password) VALUES (?, ?)";
+        SQL = mysql.format(SQL,[username, password]);
+        connection.query(SQL, function (err, _) {
+            if (err) {
+                return res.json({ error: true, message: "Error: " + err });
+            }
+            let token = generateToken();
+            self.sessions[token] = username; // Store session
+            res.setHeader("token", token);
+            res.json({ error: false, message: "Account created successfully", "token": token });
+        });
+    })
+
+    router.get("/login", function(req, res) {
+        var username = req.query.username;
+        var password = req.query.password;
+
+        var SQL = "SELECT COUNT(1) as count FROM accounts WHERE username = ? AND password = ?";
+        SQL = mysql.format(SQL,[username, password]);
+        connection.query(SQL, [username, password], function (err, rows) {
+            if (err) {
+                return res.json({ error: true, message: "Error executing MySQL query", sql: SQL });
+            }
+
+            if (rows[0].count === 1) {
+                let token = generateToken();
+                self.sessions[token] = username; // Store session
+                res.setHeader("token", token);
+                res.json({ error: false, message: "Login successfully", "token": token });
+            } else {
+                res.status(401).json({ error: true, message: "Invalid credentials", query: SQL, result: rows });
+            }
+        });
+    })
+
+    router.get("/",function(req,res) {
         res.json({"Message":"Orders Webservices Server Version 1.0"});
     });
     
@@ -50,6 +94,11 @@ REST_ROUTER.prototype.handleRoutes= function(router,connection) {
     // res parameter is the response object
   
     router.get("/orders",function(req,res){
+        let token = req.headers.token;
+        if (!token || !self.sessions[token]) {
+            return res.status(401).json({ error: true, message: "Unauthorized" });
+        }
+
         console.log("Getting all database entries..." );
         var query = "SELECT * FROM ??";
         var table = ["orders"];
@@ -68,6 +117,11 @@ REST_ROUTER.prototype.handleRoutes= function(router,connection) {
     // res parameter is the response object
      
     router.get("/orders/:order_id",function(req,res){
+        let token = req.headers.token;
+        if (!token || !self.sessions[token]) {
+            return res.status(401).json({ error: true, message: "Unauthorized" });
+        }
+
         console.log("Getting order ID: ", req.params.order_id );
         var query = "SELECT * FROM ?? WHERE ??=?";
         var table = ["orders","order_id",req.params.order_id];
@@ -86,6 +140,11 @@ REST_ROUTER.prototype.handleRoutes= function(router,connection) {
     // res parameter is the response object 
   
     router.post("/orders",function(req,res){
+        let token = req.headers.token;
+        if (!token || !self.sessions[token]) {
+            return res.status(401).json({ error: true, message: "Unauthorized" });
+        }
+
         //console.log("url:", req.url);
         //console.log("body:", req.body);
         console.log("Adding to orders table ", req.body.order_date,",",req.body.first_name,",",req.body.last_name,",",req.body.address,",",req.body.phone);
@@ -102,6 +161,10 @@ REST_ROUTER.prototype.handleRoutes= function(router,connection) {
     });
 
     router.delete("/orders/:order_id",function(req,res){
+        let token = req.headers.token;
+        if (!token || !self.sessions[token]) {
+            return res.status(401).json({ error: true, message: "Unauthorized" });
+        }
         console.log("Deleting order ID: ", req.params.order_id );
         var query = "DELETE FROM ?? WHERE ??=?";
         var table = ["orders","order_id",req.params.order_id];
