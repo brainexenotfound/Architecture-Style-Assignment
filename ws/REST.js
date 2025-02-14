@@ -118,8 +118,10 @@ REST_ROUTER.prototype.handleRoutes= function(router,connection) {
         query = mysql.format(query,table);
         connection.query(query,function(err,rows){
             if(err) {
+                logger.logAction(username, "DELETE_ORDER", false);
                 res.json({"Error" : true, "Message" : "Error executing MySQL query"});
             } else {
+                logger.logAction(username, "DELETE_ORDER", true);
                 res.json({"Error" : false, "Message" : "Success"});
             }
         });
