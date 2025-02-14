@@ -132,7 +132,7 @@ public class AuthServices extends UnicastRemoteObject implements AuthServicesAI
 
         Connection conn = null;		                 // connection to the orderinfo database
         Statement stmt = null;		                 // A Statement object is an interface that represents a SQL statement.
-        String ReturnString = "User Authenticated";	     // Return string. If everything works you get an 'OK' message
+        String ReturnString = "User Authenticated.";	     // Return string. If everything works you get an 'OK' message
         							                 // if not you get an error string
         try
         {
@@ -162,14 +162,14 @@ public class AuthServices extends UnicastRemoteObject implements AuthServicesAI
                     // Note: For simplicity, we use username as token here.
                     // In a real system, we should generate a unique token and store it in the database.
                     ReturnString = "Token: " + iusername;
-                    logger.log(Level.INFO, String.format("User %s authenticated", iusername), "TODO");
+                    logger.log(Level.INFO, String.format("User %s authenticated.", iusername), "TODO");
                 } else {
                     ReturnString = "Error: Incorrect password";
-                    logger.log(Level.INFO, String.format("User %s failed to authenticate", iusername), "TODO");
+                    logger.log(Level.INFO, String.format("User %s failed to authenticate.", iusername), "TODO");
                 }
             } else {
                 ReturnString = "Error: User not found";
-                logger.log(Level.INFO, String.format("User %s not found", iusername), "TODO");
+                logger.log(Level.INFO, String.format("User %s not found.", iusername), "TODO");
             }
 
             rs.close();
