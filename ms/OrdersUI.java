@@ -60,6 +60,8 @@ public class OrdersUI
 			System.out.println( "2: Retrieve an order by ID." );
 			System.out.println( "3: Add a new order to the order database." );		
 			System.out.println( "4: Delete an order in the order database." );				
+			System.out.println( "8: Login." );
+			System.out.println( "9: Signup for a new account." );
 			System.out.println( "X: Exit\n" );
 			System.out.print( "\n>>>> " );
 			option = keyboard.next().charAt(0);	
@@ -227,12 +229,64 @@ public class OrdersUI
 
 					System.out.println("Request failed:: " + e);
 					
+			//////////// option 8 ////////////
+
+			if ( option == '8' )
+			{
+				// Here we authenticate a user
+
+				System.out.println("Enter username:");
+				String username = keyboard.nextLine();
+
+				System.out.println("Enter password:");
+				String password = keyboard.nextLine();
+
+				try
+				{
+					System.out.println("\nAuthenticating user...");
+					response = api.authenticateUser(username, password);
+					System.out.println(response);
+					// TODO: store the token for future requests
+
+				} catch(Exception e) {
+
+					System.out.println("Request failed:: " + e);
+
 				}
 
 				System.out.println("\nPress enter to continue..." );
 				c.readLine();
 
 			} // if	
+
+			//////////// option 9 ////////////
+
+			if ( option == '9' )
+			{
+				// Here we create a new user account
+
+				System.out.println("Enter username:");
+				String username = keyboard.nextLine();
+
+				System.out.println("Enter password:");
+				String password = keyboard.nextLine();
+
+				try
+				{
+					System.out.println("\nCreating user account...");
+					response = api.createUser(username, password);
+					System.out.println(response);
+
+				} catch(Exception e) {
+
+					System.out.println("Request failed:: " + e);
+
+				}
+
+				System.out.println("\nPress enter to continue..." );
+				c.readLine();
+
+			} // if
 
 			//////////// option X ////////////
 

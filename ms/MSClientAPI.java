@@ -126,4 +126,39 @@ public class MSClientAPI
            return(response);	
     }
 
+	/********************************************************************************
+	* Description: Creates a new user in the userinfo database
+	* Parameters: String Username, String Password
+	* Returns: String that contains the status of the create operation
+	********************************************************************************/
+	public String createUser(String Username, String Password) throws Exception
+	{
+		   // Get the registry entry for AuthServices service
+		   String entry = registry.getProperty("AuthServices");
+		   String host = entry.split(":")[0];
+		   String port = entry.split(":")[1];
+		   // Get the RMI registry
+		   Registry reg = LocateRegistry.getRegistry(host, Integer.parseInt(port));
+		   AuthServicesAI obj = (AuthServicesAI) reg.lookup("AuthServices");
+		   response = obj.createUser(Username, Password);
+		   return response;
+	}
+
+	/********************************************************************************
+	* Description: Authenticates a user in the userinfo database
+	* Parameters: String Username, String Password
+	* Returns: String that contains the access token
+	********************************************************************************/
+	public String authenticateUser(String Username, String Password) throws Exception
+	{
+		   // Get the registry entry for AuthServices service
+		   String entry = registry.getProperty("AuthServices");
+		   String host = entry.split(":")[0];
+		   String port = entry.split(":")[1];
+		   // Get the RMI registry
+		   Registry reg = LocateRegistry.getRegistry(host, Integer.parseInt(port));
+		   AuthServicesAI obj = (AuthServicesAI) reg.lookup("AuthServices");
+		   response = obj.auth(Username, Password);
+		   return response;
+	}
 }
