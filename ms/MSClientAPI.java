@@ -23,8 +23,6 @@
 import java.util.Properties;
 import java.io.FileReader;
 import java.io.IOException;
-import java.rmi.Naming; 
-import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
@@ -75,7 +73,7 @@ public class MSClientAPI
 
 	public String retrieveOrders(String id) throws Exception
 	{
-		   // Get the registry entry for RetrieveServices service
+		// Get the registry entry for RetrieveServices service
 		   String entry = registry.getProperty("RetrieveServices");
 		   String host = entry.split(":")[0];
 		   String port = entry.split(":")[1];
@@ -88,6 +86,28 @@ public class MSClientAPI
 	}
 
 	/********************************************************************************
+	* Description: Deletes the order based on the id argument provided from the
+	*              orderinfo database. Note that this method is serviced by the 
+	*			   DeleteServices server process.
+	* Parameters: id
+	* Returns: String of the order corresponding to the order id argument 
+	*          in the orderinfo database.
+	********************************************************************************/
+
+	public String deleteOrder(String id) throws Exception
+	{
+		   // Get the registry entry for DeleteServices service
+		   String entry = registry.getProperty("DeleteServices");
+		   String host = entry.split(":")[0];
+		   String port = entry.split(":")[1];
+		   // Get the RMI registry
+		   Registry reg = LocateRegistry.getRegistry(host, Integer.parseInt(port));
+		   DeleteServicesAI obj = (DeleteServicesAI)reg.lookup("DeleteServices");
+           response = obj.deleteOrder(id);
+           return(response);	
+	}	
+
+	/********************************************************************************
 	* Description: Creates the new order to the orderinfo database
 	* Parameters: None
 	* Returns: String that contains the status of the create operatation
@@ -95,7 +115,7 @@ public class MSClientAPI
 
    	public String newOrder(String Date, String FirstName, String LastName, String Address, String Phone) throws Exception
 	{
-		   // Get the registry entry for CreateServices service
+		// Get the registry entry for CreateServices service
 		   String entry = registry.getProperty("CreateServices");
 		   String host = entry.split(":")[0];
 		   String port = entry.split(":")[1];

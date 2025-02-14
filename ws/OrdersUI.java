@@ -23,6 +23,7 @@ import java.util.Scanner;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.io.Console;
+import java.net.Authenticator;
 
 public class OrdersUI
 {
@@ -51,13 +52,13 @@ public class OrdersUI
 		while (!done)
 		{	
 			// Here, is the main menu set of choices
-
 			System.out.println( "\n\n\n\n" );
 			System.out.println( "Orders Database User Interface: \n" );
 			System.out.println( "Select an Option: \n" );
 			System.out.println( "1: Retrieve all orders in the order database." );
 			System.out.println( "2: Retrieve an order by ID." );
-			System.out.println( "3: Add a new order to the order database." );				
+			System.out.println( "3: Add a new order to the order database." );			
+			System.out.println( "4: Delete an order from the order database.");	
 			System.out.println( "X: Exit\n" );
 			System.out.print( "\n>>>> " );
 			option = keyboard.next().charAt(0);	
@@ -188,6 +189,27 @@ public class OrdersUI
 				option = ' '; //Clearing option. This incase the user enterd X/x the program will not exit.
 
 			} // if
+
+			//////////// option 4 ////////////
+
+            if ( option == '4' )
+            {
+                // Here we get the order ID for deletion
+                System.out.print( "\nEnter the order ID to delete: " );
+                orderid = keyboard.nextLine();
+
+                try
+                {
+                    System.out.println("\nDeleting order...");
+                    response = api.deleteOrder(orderid);
+                    System.out.println(response);
+                } catch(Exception e) {
+                    System.out.println("Request failed:: " + e);
+                }
+
+                System.out.println("\nPress enter to continue..." );
+                c.readLine();
+            } // if
 
 			//////////// option X ////////////
 

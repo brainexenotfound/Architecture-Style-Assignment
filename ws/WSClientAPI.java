@@ -80,7 +80,7 @@ public class WSClientAPI
 	public String retrieveOrders(String id) throws Exception
 	{
 		// Set up the URL and connect to the node server
-		String url = "http://localhost:3000/api/orders/"+id;
+		String url = "http://ws_server:3000/api/orders/"+id;
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
@@ -115,7 +115,8 @@ public class WSClientAPI
    	public String newOrder(String Date, String FirstName, String LastName, String Address, String Phone) throws Exception
 	{
 		// Set up the URL and connect to the node server		
-		URL url = new URL("http://localhost:3000/api/orders");
+		URL url = new URL("http://ws_server:3000/api/orders");
+		URL url = new URL("http://ws_server:3000/api/orders");
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
 		// The POST parameters
@@ -155,5 +156,37 @@ public class WSClientAPI
 
 		return(response.toString());
 		
-    } // newOrder
+    } 
+	
+	/********************************************************************************
+	* Description: Delets order by order id
+	* Parameters: None
+	* Returns: Delete order sucess
+	********************************************************************************/
+	public String deleteOrder(String orderId) throws Exception
+    {
+        // Set up the URL and open connection to the node server
+        String url = "http://ws_server:3000/api/orders/" + orderId;
+        URL obj = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        
+        // Configure the connection for DELETE
+        con.setRequestMethod("DELETE");
+        int responseCode = con.getResponseCode();
+
+        // Read the response
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+
+        while ((inputLine = in.readLine()) != null) 
+        {
+            response.append(inputLine);
+        }
+        in.close();
+        con.disconnect();
+
+        return response.toString();
+    }
+
 } // WSClientAPI

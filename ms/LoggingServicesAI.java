@@ -1,13 +1,13 @@
 /******************************************************************************************************************
-* File: CreateServicesAI.java
+* File: RetrieveServicesAI.java
 * Course: 17655
 * Project: Assignment A3
 * Copyright: Copyright (c) 2018 Carnegie Mellon University
 * Versions:
 *	1.0 February 2018 - Initial write of assignment 3 (ajl).
 *
-* Description: This class provides the abstract interface for the create micro services, CreateServices.
-* The implementation of these abstract interfaces can be found in the CreateServices.java class.
+* Description: This class provides the abstract interface for the retrieve micro service, RetrieveServices.
+* The implementation of these abstract interfaces can be found in the RetrieveServices.java class.
 * The micro services are partitioned as Create, Retrieve, Update, Delete (CRUD) service packages. Each service 
 * is its own process (eg. executing in a separate JVM). It would be a good practice to follow this convention
 * when adding and modifying services. Note that services can be duplicated and differentiated by IP
@@ -17,20 +17,24 @@
 * Parameters: None
 *
 * Internal Methods:
-*  String newOrder() - creates a new order in the orderinfo database
+*  String retrieveOrders() - gets and returns all the orders in the orderinfo database
+*  String retrieveOrders(String id) - gets and returns the order associated with the order id
 *
 * External Dependencies: None
 ******************************************************************************************************************/
 
 import java.rmi.*;
+import java.util.logging.Level;
+
 		
-public interface CreateServicesAI extends java.rmi.Remote
+public interface LoggingServicesAI extends java.rmi.Remote
 {
 	/*******************************************************
-	* Creates a new order from the provided arguments.
-	* Returns an OK message or an error string.
+	* Retrieves all orders from the orderinfo database and 
+	* returns them in the form of a string in ordered pairs 
+	* format.
 	*******************************************************/
 
-	String newOrder(String Date, String FirstName, String LastName, String Address, String Phone) throws RemoteException, NotBoundException;
+	void log(Level level, String message, String userId) throws RemoteException;
 
 }
