@@ -59,9 +59,12 @@ services:
         MYSQL_PASSWORD: foo
     depends_on:
       - mysql
+      - logging
     environment:
       RMI_REMOTE_HOST: ms_delete
       RMI_REMOTE_PORT: 1097
+      MYSQL_REMOTE_HOST: ms_mysql
+      MYSQL_REMOTE_PORT: 3306
   
   auth:
     image: ms_auth
@@ -73,6 +76,7 @@ services:
         MYSQL_PASSWORD: foo
     depends_on:
       - mysql
+      - logging
     environment:
       RMI_REMOTE_HOST: ms_auth
       RMI_REMOTE_PORT: 1095
