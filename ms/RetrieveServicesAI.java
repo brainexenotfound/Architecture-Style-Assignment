@@ -33,7 +33,7 @@ public interface RetrieveServicesAI extends java.rmi.Remote
 	* format.
 	*******************************************************/
 
-	String retrieveOrders() throws RemoteException, NotBoundException;
+	String retrieveOrders(String authToken) throws RemoteException, NotBoundException;
 
 	/*******************************************************
 	* Retrieves the order corresponding to the order id in 
@@ -42,5 +42,5 @@ public interface RetrieveServicesAI extends java.rmi.Remote
 	* pairs format.
 	*******************************************************/	
 
-	String retrieveOrders(String id ) throws RemoteException, NotBoundException;
+	String retrieveOrders(String id, String authToken) throws RemoteException, NotBoundException;
 }

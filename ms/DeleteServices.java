@@ -74,8 +74,15 @@ public class DeleteServices extends UnicastRemoteObject implements DeleteService
     // This method will delete the order in the orderinfo database corresponding to the id
     // provided in the argument.
 
-    public String deleteOrder(String orderid) throws RemoteException, NotBoundException
+    public String deleteOrder(String orderid, String authToken) throws RemoteException, NotBoundException
     {
+        Registry loggingRegistry = LocateRegistry.getRegistry("ms_logging", 1096);
+        LoggingServicesAI logger = (LoggingServicesAI) loggingRegistry.lookup("LoggingServices");
+        String username = TokenVerification.verifyToken(authToken);
+        if (username == null) {
+            logger.log(Level.INFO, "Invalid token: %s", authToken);
+            return "Invalid token";
+        }
       	// Local declarations
 
         Connection conn = null;		// connection to the orderinfo database
@@ -83,8 +90,6 @@ public class DeleteServices extends UnicastRemoteObject implements DeleteService
         String ReturnString = "[";	// Return string. If everything works you get an ordered pair of data
         							// if not you get an error string
 
-        Registry loggingRegistry = LocateRegistry.getRegistry("ms_logging", 1096);
-        LoggingServicesAI logger = (LoggingServicesAI) loggingRegistry.lookup("LoggingServices");
 
         try
         {

@@ -301,7 +301,7 @@ Retrieving All Orders::
 To check that the MySQL database has been set up correctly, you have to connect to the database container (`ws_mysql` for the web-services example or `ms_mysql` for the microservices). For example, to check the database for web-services, type:
 
 ```bash
-$ docker-compose -f ws.yml exec mysql mysql -u root –p
+$ docker-compose -f ws.yml exec mysql mysql -u root -p
 ```
 
 (For the microservices, use `ms.yml` instead). This will log you into the mysql database for the appropriate system (after you type the root password for mysql from above).

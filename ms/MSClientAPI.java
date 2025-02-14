@@ -30,6 +30,7 @@ public class MSClientAPI
 {
 	String response = null;
 	Properties registry = null;
+	String authToken = null;
 
 	public MSClientAPI() throws IOException {
 		  // Loads the registry from 'registry.properties'
@@ -58,7 +59,7 @@ public class MSClientAPI
 		   // Get the RMI registry
 		   Registry reg = LocateRegistry.getRegistry(host, Integer.parseInt(port));
 		   RetrieveServicesAI obj = (RetrieveServicesAI )reg.lookup("RetrieveServices");
-		   response = obj.retrieveOrders();
+		   response = obj.retrieveOrders(authToken);
 		   return response;
 	}
 	
@@ -80,7 +81,7 @@ public class MSClientAPI
 		   // Get the RMI registry
 		   Registry reg = LocateRegistry.getRegistry(host, Integer.parseInt(port));
 		   RetrieveServicesAI obj = (RetrieveServicesAI )reg.lookup("RetrieveServices");
-           response = obj.retrieveOrders(id);
+           response = obj.retrieveOrders(id, authToken);
            return(response);	
 
 	}
@@ -103,7 +104,7 @@ public class MSClientAPI
 		   // Get the RMI registry
 		   Registry reg = LocateRegistry.getRegistry(host, Integer.parseInt(port));
 		   DeleteServicesAI obj = (DeleteServicesAI)reg.lookup("DeleteServices");
-           response = obj.deleteOrder(id);
+           response = obj.deleteOrder(id, authToken);
            return(response);	
 	}	
 
@@ -122,8 +123,46 @@ public class MSClientAPI
 		   // Get the RMI registry
 		   Registry reg = LocateRegistry.getRegistry(host, Integer.parseInt(port));
            CreateServicesAI obj = (CreateServicesAI) reg.lookup("CreateServices"); 
-           response = obj.newOrder(Date, FirstName, LastName, Address, Phone);
+           response = obj.newOrder(Date, FirstName, LastName, Address, Phone, authToken);
            return(response);	
     }
 
+	/********************************************************************************
+	* Description: Creates a new user in the userinfo database
+	* Parameters: String Username, String Password
+	* Returns: String that contains the status of the create operation
+	********************************************************************************/
+	public String createUser(String Username, String Password) throws Exception
+	{
+		   // Get the registry entry for AuthServices service
+		   String entry = registry.getProperty("AuthServices");
+		   String host = entry.split(":")[0];
+		   String port = entry.split(":")[1];
+		   // Get the RMI registry
+		   Registry reg = LocateRegistry.getRegistry(host, Integer.parseInt(port));
+		   AuthServicesAI obj = (AuthServicesAI) reg.lookup("AuthServices");
+		   response = obj.createUser(Username, Password);
+		   return response;
+	}
+
+	/********************************************************************************
+	* Description: Authenticates a user in the userinfo database
+	* Parameters: String Username, String Password
+	* Returns: String that contains the access token
+	********************************************************************************/
+	public String authenticateUser(String Username, String Password) throws Exception
+	{
+		   // Get the registry entry for AuthServices service
+		   String entry = registry.getProperty("AuthServices");
+		   String host = entry.split(":")[0];
+		   String port = entry.split(":")[1];
+		   // Get the RMI registry
+		   Registry reg = LocateRegistry.getRegistry(host, Integer.parseInt(port));
+		   AuthServicesAI obj = (AuthServicesAI) reg.lookup("AuthServices");
+		   response = obj.auth(Username, Password);
+		   if (response.startsWith("Token:")) {
+			   authToken = response;
+		   }
+		   return response;
+	}
 }

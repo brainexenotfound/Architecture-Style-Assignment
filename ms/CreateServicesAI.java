@@ -31,6 +31,6 @@ public interface CreateServicesAI extends java.rmi.Remote
 	* Returns an OK message or an error string.
 	*******************************************************/
 
-	String newOrder(String Date, String FirstName, String LastName, String Address, String Phone) throws RemoteException, NotBoundException;
+	String newOrder(String Date, String FirstName, String LastName, String Address, String Phone, String authToken) throws RemoteException, NotBoundException;
 
 }

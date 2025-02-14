@@ -71,8 +71,15 @@ public class RetrieveServices extends UnicastRemoteObject implements RetrieveSer
 
     // This method will return all the entries in the orderinfo database
 
-    public String retrieveOrders() throws RemoteException, NotBoundException
+    public String retrieveOrders(String authToken) throws RemoteException, NotBoundException
     {
+        Registry loggingRegistry = LocateRegistry.getRegistry("ms_logging", 1096);
+        LoggingServicesAI logger = (LoggingServicesAI) loggingRegistry.lookup("LoggingServices");
+        String username = TokenVerification.verifyToken(authToken);
+        if (username == null) {
+            logger.log(Level.INFO, "Invalid token: %s", authToken);
+            return "Invalid token";
+        }
       	// Local declarations
 
         Connection conn = null;		// connection to the orderinfo database
@@ -80,8 +87,6 @@ public class RetrieveServices extends UnicastRemoteObject implements RetrieveSer
         String ReturnString = "[";	// Return string. If everything works you get an ordered pair of data
         							// if not you get an error string
 
-        Registry loggingRegistry = LocateRegistry.getRegistry("ms_logging", 1096);
-        LoggingServicesAI logger = (LoggingServicesAI) loggingRegistry.lookup("LoggingServices");
         
         try
         {
@@ -155,8 +160,15 @@ public class RetrieveServices extends UnicastRemoteObject implements RetrieveSer
     // This method will returns the order in the orderinfo database corresponding to the id
     // provided in the argument.
 
-    public String retrieveOrders(String orderid) throws RemoteException, NotBoundException
+    public String retrieveOrders(String orderid, String authToken) throws RemoteException, NotBoundException
     {
+        Registry loggingRegistry = LocateRegistry.getRegistry("ms_logging", 1096);
+        LoggingServicesAI logger = (LoggingServicesAI) loggingRegistry.lookup("LoggingServices");
+        String username = TokenVerification.verifyToken(authToken);
+        if (username == null) {
+            logger.log(Level.INFO, "Invalid token: %s", authToken);
+            return "Invalid token";
+        }
       	// Local declarations
 
         Connection conn = null;		// connection to the orderinfo database
@@ -164,8 +176,6 @@ public class RetrieveServices extends UnicastRemoteObject implements RetrieveSer
         String ReturnString = "[";	// Return string. If everything works you get an ordered pair of data
         							// if not you get an error string
 
-        Registry loggingRegistry = LocateRegistry.getRegistry("ms_logging", 1096);
-        LoggingServicesAI logger = (LoggingServicesAI) loggingRegistry.lookup("LoggingServices");
 
         try
         {
