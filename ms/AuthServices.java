@@ -20,10 +20,13 @@
 *	= MySQL
 	- orderinfo database 
 ******************************************************************************************************************/
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException; 
 import java.rmi.server.UnicastRemoteObject;
+import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.sql.*;
+import java.util.logging.Level;
 
 public class AuthServices extends UnicastRemoteObject implements AuthServicesAI
 { 
@@ -74,14 +77,17 @@ public class AuthServices extends UnicastRemoteObject implements AuthServicesAI
     // If the user is not in the database, it adds the user to the database.
     // Else, it returns an error message.
 
-    public String createUser(String iusername, String ipassword) throws RemoteException
+    public String createUser(String iusername, String ipassword) throws RemoteException, NotBoundException
     {
         Connection conn = null;
         Statement stmt = null;
         String ReturnString = "User Created";
+        Registry loggingRegistry = LocateRegistry.getRegistry("ms_logging", 1096);
+        LoggingServicesAI logger = (LoggingServicesAI) loggingRegistry.lookup("LoggingServices");
 
         try
         {
+            logger.log(Level.INFO, "Method createUser() called.", "TODO");
             Class.forName(JDBC_CONNECTOR);
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             stmt = conn.createStatement();
@@ -91,12 +97,14 @@ public class AuthServices extends UnicastRemoteObject implements AuthServicesAI
 
             if (rs.next()) {
                 ReturnString = "Error: User already exists";
+                logger.log(Level.INFO, String.format("User %s already exists", iusername), "TODO");
             } else {
                 // * Insert the new user
                 // Note: for simplicity, we store the password in plain text.
                 // In a real system, we should hash the password before storing it in the database.
                 sql = "INSERT INTO users (username, password) VALUES ('" + iusername + "', '" + ipassword + "')";
                 stmt.executeUpdate(sql);
+                logger.log(Level.INFO, String.format("Successfully create new user %s, using insert query: %s", iusername, sql), "TODO");
             }
 
             rs.close();
@@ -116,8 +124,10 @@ public class AuthServices extends UnicastRemoteObject implements AuthServicesAI
     // If the user is in the database and the password matches, it returns a token.
     // Else, it returns an error message.
 
-    public String auth(String iusername, String ipassword) throws RemoteException
+    public String auth(String iusername, String ipassword) throws RemoteException, NotBoundException
     {
+        Registry loggingRegistry = LocateRegistry.getRegistry("ms_logging", 1096);
+        LoggingServicesAI logger = (LoggingServicesAI) loggingRegistry.lookup("LoggingServices");
       	// Local declarations
 
         Connection conn = null;		                 // connection to the orderinfo database
@@ -152,11 +162,14 @@ public class AuthServices extends UnicastRemoteObject implements AuthServicesAI
                     // Note: For simplicity, we use username as token here.
                     // In a real system, we should generate a unique token and store it in the database.
                     ReturnString = "Token: " + iusername;
+                    logger.log(Level.INFO, String.format("User %s authenticated", iusername), "TODO");
                 } else {
                     ReturnString = "Error: Incorrect password";
+                    logger.log(Level.INFO, String.format("User %s failed to authenticate", iusername), "TODO");
                 }
             } else {
                 ReturnString = "Error: User not found";
+                logger.log(Level.INFO, String.format("User %s not found", iusername), "TODO");
             }
 
             rs.close();

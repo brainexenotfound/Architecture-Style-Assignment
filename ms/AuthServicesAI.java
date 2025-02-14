@@ -17,7 +17,7 @@
 *
 * External Dependencies: None
 ******************************************************************************************************************/
-
+import java.rmi.NotBoundException;
 import java.rmi.*;
 		
 public interface AuthServicesAI extends java.rmi.Remote
@@ -28,7 +28,7 @@ public interface AuthServicesAI extends java.rmi.Remote
 	 * Otherwise, an error message is returned.
 	********************************************************/
 
-	String createUser(String Username, String Password) throws RemoteException;
+	String createUser(String Username, String Password) throws RemoteException, NotBoundException;
 
 	/*******************************************************
 	* Authenticates a user with the provided username and password. 
@@ -36,6 +36,6 @@ public interface AuthServicesAI extends java.rmi.Remote
 	* Otherwise, an error message is returned.
 	*******************************************************/
 
-	String auth(String Username, String Password) throws RemoteException;
+	String auth(String Username, String Password) throws RemoteException, NotBoundException;
 
 }

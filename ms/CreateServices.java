@@ -77,8 +77,11 @@ public class CreateServices extends UnicastRemoteObject implements CreateService
 
     public String newOrder(String idate, String ifirst, String ilast, String iaddress, String iphone, String authToken) throws RemoteException, NotBoundException
     {
+        Registry loggingRegistry = LocateRegistry.getRegistry("ms_logging", 1096);
+        LoggingServicesAI logger = (LoggingServicesAI) loggingRegistry.lookup("LoggingServices");
         String username = TokenVerification.verifyToken(authToken);
         if (username == null) {
+            logger.log(Level.INFO, "Invalid token: %s", authToken);
             return "Invalid token";
         }
       	// Local declarations
@@ -87,8 +90,6 @@ public class CreateServices extends UnicastRemoteObject implements CreateService
         Statement stmt = null;		                 // A Statement object is an interface that represents a SQL statement.
         String ReturnString = "Order Created";	     // Return string. If everything works you get an 'OK' message
         							                 // if not you get an error string
-        Registry loggingRegistry = LocateRegistry.getRegistry("ms_logging", 1096);
-        LoggingServicesAI logger = (LoggingServicesAI) loggingRegistry.lookup("LoggingServices");
 
         try
         {
