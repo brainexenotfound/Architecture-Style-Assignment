@@ -15,6 +15,12 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+
+CREATE TABLE accounts (
+    username VARCHAR(50) PRIMARY KEY,  -- Username as primary key (must be unique)
+    password CHAR(64) NOT NULL         -- Store SHA-256 hashed password (64 characters)
+);
+
 --
 -- Table structure for table `orders`
 --
