@@ -75,8 +75,12 @@ public class CreateServices extends UnicastRemoteObject implements CreateService
 
     // This method add the entry into the ms_orderinfo database
 
-    public String newOrder(String idate, String ifirst, String ilast, String iaddress, String iphone) throws RemoteException, NotBoundException
+    public String newOrder(String idate, String ifirst, String ilast, String iaddress, String iphone, String authToken) throws RemoteException, NotBoundException
     {
+        String username = TokenVerification.verifyToken(authToken);
+        if (username == null) {
+            return "Invalid token";
+        }
       	// Local declarations
 
         Connection conn = null;		                 // connection to the orderinfo database

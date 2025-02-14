@@ -123,7 +123,7 @@ public class MSClientAPI
 		   // Get the RMI registry
 		   Registry reg = LocateRegistry.getRegistry(host, Integer.parseInt(port));
            CreateServicesAI obj = (CreateServicesAI) reg.lookup("CreateServices"); 
-           response = obj.newOrder(Date, FirstName, LastName, Address, Phone);
+           response = obj.newOrder(Date, FirstName, LastName, Address, Phone, authToken);
            return(response);	
     }
 
