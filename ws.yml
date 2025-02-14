@@ -7,7 +7,7 @@ services:
       context: .
       dockerfile: Dockerfile-ws
       args:
-        MYSQL_PASSWORD: silkcode
+        MYSQL_PASSWORD: test
     depends_on:
       - mysql
     expose: 
@@ -24,7 +24,7 @@ services:
       - ./init-db:/docker-entrypoint-initdb.d
       - ws_db:/var/lib/mysql
     environment:
-      "MYSQL_ROOT_PASSWORD": silkcode
+      "MYSQL_ROOT_PASSWORD": test
       "MYSQL_DATABASE": ws_orderinfo
       "MYSQL_HOST": ws_mysql
     expose:

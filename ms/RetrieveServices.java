@@ -20,6 +20,7 @@
 *	= MySQL
 	- orderinfo database 
 ******************************************************************************************************************/
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException; 
 import java.rmi.server.UnicastRemoteObject;
 import java.rmi.registry.Registry;
@@ -70,7 +71,7 @@ public class RetrieveServices extends UnicastRemoteObject implements RetrieveSer
 
     // This method will return all the entries in the orderinfo database
 
-    public String retrieveOrders() throws RemoteException
+    public String retrieveOrders() throws RemoteException, NotBoundException
     {
       	// Local declarations
 
@@ -79,13 +80,14 @@ public class RetrieveServices extends UnicastRemoteObject implements RetrieveSer
         String ReturnString = "[";	// Return string. If everything works you get an ordered pair of data
         							// if not you get an error string
 
-        Registry loggingRegistry = LocateRegistry.getRegistry("ms_logging", 1097);
+        Registry loggingRegistry = LocateRegistry.getRegistry("ms_logging", 1096);
         LoggingServicesAI logger = (LoggingServicesAI) loggingRegistry.lookup("LoggingServices");
+        
         try
         {
             // Here we load and initialize the JDBC connector. Essentially a static class
             // that is used to provide access to the database from inside this class.
-            logger.log(Level.INFO, "method retreiveorders() called by TODO: user", "TODO");
+            logger.log(Level.INFO, "method retreiveOrders() called.", "TODO");
 
             Class.forName(JDBC_CONNECTOR);
 
@@ -104,6 +106,7 @@ public class RetrieveServices extends UnicastRemoteObject implements RetrieveSer
             String sql;
             sql = "SELECT * FROM orders";
             ResultSet rs = stmt.executeQuery(sql);
+            logger.log(Level.INFO, String.format("Successfully retreived all orders, using insert query: %s", sql), "TODO");
 
             //Extract data from result set
 
@@ -141,7 +144,7 @@ public class RetrieveServices extends UnicastRemoteObject implements RetrieveSer
             conn.close();
 
         } catch(Exception e) {
-            logger.log(Level.SEVERE, "Method call by TODO: user retreiveOrders() exception. Error message: " + e.toString(), "TODO");
+            logger.log(Level.SEVERE, "Method retreiveOrders() exception. Error message: " + e.toString(), "TODO");
             ReturnString = e.toString();
         } 
         
@@ -152,7 +155,7 @@ public class RetrieveServices extends UnicastRemoteObject implements RetrieveSer
     // This method will returns the order in the orderinfo database corresponding to the id
     // provided in the argument.
 
-    public String retrieveOrders(String orderid) throws RemoteException
+    public String retrieveOrders(String orderid) throws RemoteException, NotBoundException
     {
       	// Local declarations
 
@@ -161,7 +164,7 @@ public class RetrieveServices extends UnicastRemoteObject implements RetrieveSer
         String ReturnString = "[";	// Return string. If everything works you get an ordered pair of data
         							// if not you get an error string
 
-        Registry loggingRegistry = LocateRegistry.getRegistry("ms_logging", 1097);
+        Registry loggingRegistry = LocateRegistry.getRegistry("ms_logging", 1096);
         LoggingServicesAI logger = (LoggingServicesAI) loggingRegistry.lookup("LoggingServices");
 
         try
@@ -187,6 +190,7 @@ public class RetrieveServices extends UnicastRemoteObject implements RetrieveSer
             String sql;
             sql = "SELECT * FROM orders where order_id=" + orderid;
             ResultSet rs = stmt.executeQuery(sql);
+            logger.log(Level.INFO, String.format("Successfully retreived order ID:%s, using insert query: %s", orderid, sql), "TODO");
 
             // Extract data from result set. Note there should only be one for this method.
             // I used a while loop should there every be a case where there might be multiple

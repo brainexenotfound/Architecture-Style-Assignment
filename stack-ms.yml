@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile-cs
       args:
-        MYSQL_PASSWORD: silkcode
+        MYSQL_PASSWORD: foo
     depends_on:
       - mysql
     environment:
@@ -24,30 +24,12 @@ services:
       context: .
       dockerfile: Dockerfile-rs
       args:
-        MYSQL_PASSWORD: silkcode
+        MYSQL_PASSWORD: foo
     depends_on:
       - mysql
     environment:
       RMI_REMOTE_HOST: ms_retrieve
       RMI_REMOTE_PORT: 1098
-      MYSQL_REMOTE_HOST: ms_mysql
-      MYSQL_REMOTE_PORT: 3306
-    networks:
-      - ms
-
-  delete:
-    image: ms_delete
-    container_name: ms_delete
-    build:
-      context: .
-      dockerfile: Dockerfile-rs
-      args:
-        MYSQL_PASSWORD: test
-    depends_on:
-      - mysql
-    environment:
-      RMI_REMOTE_HOST: ms_delete
-      RMI_REMOTE_PORT: 1097
       MYSQL_REMOTE_HOST: ms_mysql
       MYSQL_REMOTE_PORT: 3306
     networks:
@@ -75,7 +57,7 @@ services:
       - ./init-db:/docker-entrypoint-initdb.d
       - ms_db:/var/lib/mysql
     environment:
-      "MYSQL_ROOT_PASSWORD": silkcode
+      "MYSQL_ROOT_PASSWORD": foo
       "MYSQL_DATABASE": ms_orderinfo
       "MYSQL_HOST": ms_mysql
     expose:

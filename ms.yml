@@ -45,7 +45,7 @@ services:
       dockerfile: Dockerfile-ls
     environment:
       RMI_REMOTE_HOST: ms_logging
-      RMI_REMOTE_PORT: 1097
+      RMI_REMOTE_PORT: 1096
     networks:
       - ms
 

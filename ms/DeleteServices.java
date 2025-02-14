@@ -19,10 +19,13 @@
 *	= MySQL
 	- orderinfo database 
 ******************************************************************************************************************/
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException; 
 import java.rmi.server.UnicastRemoteObject;
+import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.sql.*;
+import java.util.logging.Level;
 
 public class DeleteServices extends UnicastRemoteObject implements DeleteServicesAI
 { 
@@ -71,7 +74,7 @@ public class DeleteServices extends UnicastRemoteObject implements DeleteService
     // This method will delete the order in the orderinfo database corresponding to the id
     // provided in the argument.
 
-    public String deleteOrder(String orderid) throws RemoteException
+    public String deleteOrder(String orderid) throws RemoteException, NotBoundException
     {
       	// Local declarations
 
@@ -80,8 +83,13 @@ public class DeleteServices extends UnicastRemoteObject implements DeleteService
         String ReturnString = "[";	// Return string. If everything works you get an ordered pair of data
         							// if not you get an error string
 
+        Registry loggingRegistry = LocateRegistry.getRegistry("ms_logging", 1096);
+        LoggingServicesAI logger = (LoggingServicesAI) loggingRegistry.lookup("LoggingServices");
+
         try
         {
+            logger.log(Level.INFO, String.format("Method deleteOrder() called with ID:%s.", orderid), "TODO");
+
             // Here we load and initialize the JDBC connector. Essentially a static class
             // that is used to provide access to the database from inside this class.
 
@@ -105,6 +113,8 @@ public class DeleteServices extends UnicastRemoteObject implements DeleteService
             stmt.executeUpdate(sql);
             //ResultSet rs = stmt.executeQuery(sql);
 
+            logger.log(Level.INFO, String.format("Successfully deleted order ID:%s, using insert query: %s", orderid, sql), "TODO");
+
             // Extract data from result set. Note there should only be one for this method.
             // I used a while loop should there every be a case where there might be multiple
             // orders for a single ID.
@@ -117,7 +127,7 @@ public class DeleteServices extends UnicastRemoteObject implements DeleteService
             conn.close();
 
         } catch(Exception e) {
-
+            logger.log(Level.SEVERE, "method deleteOrder() exception. Error message: " + e.toString(), "TODO");
             ReturnString = e.toString();
 
         } 
