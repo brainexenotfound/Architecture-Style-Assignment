@@ -21,8 +21,10 @@
 ******************************************************************************************************************/
 import java.rmi.RemoteException; 
 import java.rmi.server.UnicastRemoteObject;
+import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.sql.*;
+import java.util.logging.Level;
 
 public class CreateServices extends UnicastRemoteObject implements CreateServicesAI
 { 
@@ -80,8 +82,13 @@ public class CreateServices extends UnicastRemoteObject implements CreateService
         Statement stmt = null;		                 // A Statement object is an interface that represents a SQL statement.
         String ReturnString = "Order Created";	     // Return string. If everything works you get an 'OK' message
         							                 // if not you get an error string
+        Registry loggingRegistry = LocateRegistry.getRegistry("ms_logging", 1097);
+        LoggingServicesAI logger = (LoggingServicesAI) loggingRegistry.lookup("LoggingServices");
+
         try
         {
+            logger.log(Level.INFO, "Method newOrder() called.", "TODO");
+
             // Here we load and initialize the JDBC connector. Essentially a static class
             // that is used to provide access to the database from inside this class.
 
@@ -112,7 +119,7 @@ public class CreateServices extends UnicastRemoteObject implements CreateService
             conn.close();
 
         } catch(Exception e) {
-
+            logger.log(Level.SEVERE, "Method newOrder() exception. Error message: " + e.toString(), "TODO");
             ReturnString = e.toString();
         } 
         
