@@ -247,7 +247,6 @@ public class OrdersUI
 					System.out.println("\nAuthenticating user...");
 					response = api.authenticateUser(username, password);
 					System.out.println(response);
-					// TODO: store the token for future requests
 
 				} catch(Exception e) {
 
