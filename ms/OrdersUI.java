@@ -228,7 +228,8 @@ public class OrdersUI
 				} catch (Exception e) {
 
 					System.out.println("Request failed:: " + e);
-					
+				}
+			}
 			//////////// option 8 ////////////
 
 			if ( option == '8' )
