@@ -98,7 +98,7 @@ public class CreateServices extends UnicastRemoteObject implements CreateService
         try
         {
             // Logging the call made to the CreateOrder microservice
-            logger.log(Level.INFO, "Method newOrder() called.", "TODO");
+            logger.log(Level.INFO, "Method newOrder() called.", username);
 
             // Here we load and initialize the JDBC connector. Essentially a static class
             // that is used to provide access to the database from inside this class.
@@ -121,7 +121,7 @@ public class CreateServices extends UnicastRemoteObject implements CreateService
             stmt.executeUpdate(sql);
             
             // Logging the response from the CreateOrder microservice 
-            logger.log(Level.INFO, String.format("Successfully created new order, using insert query: %s", sql), "TODO");
+            logger.log(Level.INFO, String.format("Successfully created new order, using insert query: %s", sql), username);
 
             // clean up the environment
 
@@ -132,7 +132,7 @@ public class CreateServices extends UnicastRemoteObject implements CreateService
 
         } catch(Exception e) {
             // Logging the error encountered by the CreateOrder microservice
-            logger.log(Level.SEVERE, "Method newOrder() exception. Error message: " + e.toString(), "TODO");
+            logger.log(Level.SEVERE, "Method newOrder() exception. Error message: " + e.toString(), username);
             ReturnString = e.toString();
         } 
         

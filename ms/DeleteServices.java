@@ -98,7 +98,7 @@ public class DeleteServices extends UnicastRemoteObject implements DeleteService
         {
             
             // Logging the call made to the DeleteOrder microservice
-            logger.log(Level.INFO, String.format("Method deleteOrder() called with ID:%s.", orderid), "TODO");
+            logger.log(Level.INFO, String.format("Method deleteOrder() called with ID:%s.", orderid), username);
 
             // Here we load and initialize the JDBC connector. Essentially a static class
             // that is used to provide access to the database from inside this class.
@@ -124,7 +124,7 @@ public class DeleteServices extends UnicastRemoteObject implements DeleteService
             //ResultSet rs = stmt.executeQuery(sql);
             
             // Logging the response from the DeleteOrder microservice
-            logger.log(Level.INFO, String.format("Successfully deleted order ID:%s, using insert query: %s", orderid, sql), "TODO");
+            logger.log(Level.INFO, String.format("Successfully deleted order ID:%s, using insert query: %s", orderid, sql), username);
 
             // Extract data from result set. Note there should only be one for this method.
             // I used a while loop should there every be a case where there might be multiple
@@ -139,7 +139,7 @@ public class DeleteServices extends UnicastRemoteObject implements DeleteService
 
         } catch(Exception e) {
             // Logging the error encountered by the DeleteOrder microservice
-            logger.log(Level.SEVERE, "method deleteOrder() exception. Error message: " + e.toString(), "TODO");
+            logger.log(Level.SEVERE, "method deleteOrder() exception. Error message: " + e.toString(), username);
             ReturnString = e.toString();
 
         } 
