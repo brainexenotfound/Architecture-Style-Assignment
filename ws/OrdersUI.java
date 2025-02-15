@@ -23,10 +23,60 @@ import java.util.Scanner;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.io.Console;
+import java.net.Authenticator;
 
 public class OrdersUI
 {
-	public static void main(String args[])
+
+	private static void loginOrSignUp(WSClientAPI api) throws Exception {
+		boolean login = false;
+		char option; // Menu choice from user
+		String username;
+		String password;
+		Scanner keyboard = new Scanner(System.in); // Keyboard scanner for user input
+	
+		while (!login) {
+			System.out.println("\n\n\n\n");
+			System.out.println("Orders Database User Interface: \n");
+			System.out.println("Select an Option: \n");
+			System.out.println("1: Sign up.");
+			System.out.println("2: Log in.");
+			System.out.println("3: Exit.");
+	
+			option = keyboard.next().charAt(0);
+			keyboard.nextLine(); // Clear buffer
+	
+			if (option == '1' || option == '2') {
+				System.out.print("\nEnter your username: ");
+				username = keyboard.nextLine();
+	
+				System.out.print("\nEnter your password: ");
+				password = keyboard.nextLine();
+	
+				String response;
+				try {
+					 response = (option == '1') ? api.signUp(username, password)
+													   : api.login(username, password);
+				} catch (Exception e) {
+					System.out.println("\nInvalid account/password: " + e);
+					e.printStackTrace();
+					continue;
+				}
+				// System.out.println("loginOrSignUp response: " + response);
+				if (response.contains("successfully")) {
+					login = true;
+				}
+			} else if (option == '3') {
+				System.out.println("Exiting...");
+				break;
+			} else {
+				System.out.println("Invalid option. Please select 1 (Sign up), 2 (Log in), or 3 (Exit).");
+			}
+		}
+	
+		// keyboard.close();
+	}
+	public static void main(String args[]) throws Exception
 	{
 		boolean done = false;						// main loop flag
 		boolean error = false;						// error flag
@@ -47,17 +97,18 @@ public class OrdersUI
 		/////////////////////////////////////////////////////////////////////////////////
 		// Main UI loop
 		/////////////////////////////////////////////////////////////////////////////////
+		loginOrSignUp(api);
 
 		while (!done)
 		{	
 			// Here, is the main menu set of choices
-
 			System.out.println( "\n\n\n\n" );
 			System.out.println( "Orders Database User Interface: \n" );
 			System.out.println( "Select an Option: \n" );
 			System.out.println( "1: Retrieve all orders in the order database." );
 			System.out.println( "2: Retrieve an order by ID." );
-			System.out.println( "3: Add a new order to the order database." );				
+			System.out.println( "3: Add a new order to the order database." );			
+			System.out.println( "4: Delete an order from the order database.");	
 			System.out.println( "X: Exit\n" );
 			System.out.print( "\n>>>> " );
 			option = keyboard.next().charAt(0);	
@@ -119,7 +170,6 @@ public class OrdersUI
 					System.out.println(response);
 
 				} catch (Exception e) {
-
 					System.out.println("Request failed:: " + e);
 					
 				}
@@ -188,6 +238,27 @@ public class OrdersUI
 				option = ' '; //Clearing option. This incase the user enterd X/x the program will not exit.
 
 			} // if
+
+			//////////// option 4 ////////////
+
+            if ( option == '4' )
+            {
+                // Here we get the order ID for deletion
+                System.out.print( "\nEnter the order ID to delete: " );
+                orderid = keyboard.nextLine();
+
+                try
+                {
+                    System.out.println("\nDeleting order...");
+                    response = api.deleteOrder(orderid);
+                    System.out.println(response);
+                } catch(Exception e) {
+                    System.out.println("Request failed:: " + e);
+                }
+
+                System.out.println("\nPress enter to continue..." );
+                c.readLine();
+            } // if
 
 			//////////// option X ////////////
 

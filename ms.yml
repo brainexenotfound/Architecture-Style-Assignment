@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile-cs
       args:
-        MYSQL_PASSWORD: test
+        MYSQL_PASSWORD: foo
     depends_on:
       - mysql
       - logging
@@ -25,7 +25,7 @@ services:
       context: .
       dockerfile: Dockerfile-rs
       args:
-        MYSQL_PASSWORD: test
+        MYSQL_PASSWORD: foo
     depends_on:
       - mysql
       - logging
@@ -56,12 +56,32 @@ services:
       context: .
       dockerfile: Dockerfile-ds
       args:
-        MYSQL_PASSWORD: test
+        MYSQL_PASSWORD: foo
     depends_on:
       - mysql
+      - logging
     environment:
       RMI_REMOTE_HOST: ms_delete
       RMI_REMOTE_PORT: 1097
+      MYSQL_REMOTE_HOST: ms_mysql
+      MYSQL_REMOTE_PORT: 3306
+    networks:
+      - ms
+  
+  auth:
+    image: ms_auth
+    container_name: ms_auth
+    build:
+      context: .
+      dockerfile: Dockerfile-auth-service
+      args:
+        MYSQL_PASSWORD: foo
+    depends_on:
+      - mysql
+      - logging
+    environment:
+      RMI_REMOTE_HOST: ms_auth
+      RMI_REMOTE_PORT: 1095
       MYSQL_REMOTE_HOST: ms_mysql
       MYSQL_REMOTE_PORT: 3306
     networks:
@@ -90,7 +110,7 @@ services:
       - ./init-db:/docker-entrypoint-initdb.d
       - ms_db:/var/lib/mysql
     environment:
-      "MYSQL_ROOT_PASSWORD": test
+      "MYSQL_ROOT_PASSWORD": foo
       "MYSQL_DATABASE": ms_orderinfo
       "MYSQL_HOST": ms_mysql
     expose:

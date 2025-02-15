@@ -76,20 +76,24 @@ public class CreateServices extends UnicastRemoteObject implements CreateService
 
     // This method add the entry into the ms_orderinfo database
 
-    public String newOrder(String idate, String ifirst, String ilast, String iaddress, String iphone) throws RemoteException, NotBoundException
+    public String newOrder(String idate, String ifirst, String ilast, String iaddress, String iphone, String authToken) throws RemoteException, NotBoundException
     {
+        // Here we create a loggingRegistry object using registry parameters.
+        // We look up the LoggingServices from the registry and create an instance of the
+        // logging service abstract interface.
+        Registry loggingRegistry = LocateRegistry.getRegistry("ms_logging", 1096);
+        LoggingServicesAI logger = (LoggingServicesAI) loggingRegistry.lookup("LoggingServices");
+        String username = TokenVerification.verifyToken(authToken);
+        if (username == null) {
+            logger.log(Level.INFO, "Invalid token: %s", authToken);
+            return "Invalid token";
+        }
       	// Local declarations
 
         Connection conn = null;		                 // connection to the orderinfo database
         Statement stmt = null;		                 // A Statement object is an interface that represents a SQL statement.
         String ReturnString = "Order Created";	     // Return string. If everything works you get an 'OK' message
         							                 // if not you get an error string
-        
-        // Here we create a loggingRegistry object using registry parameters.
-        // We look up the LoggingServices from the registry and create an instance of the
-        // logging service abstract interface.
-        Registry loggingRegistry = LocateRegistry.getRegistry("ms_logging", 1096);
-        LoggingServicesAI logger = (LoggingServicesAI) loggingRegistry.lookup("LoggingServices");
 
         try
         {
