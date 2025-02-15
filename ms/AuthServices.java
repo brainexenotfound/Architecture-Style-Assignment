@@ -87,7 +87,7 @@ public class AuthServices extends UnicastRemoteObject implements AuthServicesAI
 
         try
         {
-            logger.log(Level.INFO, "Method createUser() called.", "TODO");
+            logger.log(Level.INFO, "Method createUser() called.", "Null");
             Class.forName(JDBC_CONNECTOR);
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             stmt = conn.createStatement();
@@ -97,14 +97,14 @@ public class AuthServices extends UnicastRemoteObject implements AuthServicesAI
 
             if (rs.next()) {
                 ReturnString = "Error: User already exists";
-                logger.log(Level.INFO, String.format("User %s already exists", iusername), "TODO");
+                logger.log(Level.INFO, String.format("User %s already exists", iusername), "Null");
             } else {
                 // * Insert the new user
                 // Note: for simplicity, we store the password in plain text.
                 // In a real system, we should hash the password before storing it in the database.
                 sql = "INSERT INTO users (username, password) VALUES ('" + iusername + "', '" + ipassword + "')";
                 stmt.executeUpdate(sql);
-                logger.log(Level.INFO, String.format("Successfully create new user %s, using insert query: %s", iusername, sql), "TODO");
+                logger.log(Level.INFO, String.format("Successfully create new user %s, using insert query: %s", iusername, sql), iusername);
             }
 
             rs.close();
@@ -113,6 +113,7 @@ public class AuthServices extends UnicastRemoteObject implements AuthServicesAI
             stmt.close();
             conn.close();
         } catch (Exception e) {
+            logger.log(Level.SEVERE, "Method createUser() exception. Error message: " + e.toString(), "Null");
             ReturnString = e.toString();
         }
 
