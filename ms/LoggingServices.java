@@ -22,7 +22,6 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.rmi.registry.Registry;
 import java.util.logging.*;
-import java.sql.*;
 
 public class LoggingServices extends UnicastRemoteObject implements LoggingServicesAI
 { 
@@ -35,7 +34,7 @@ public class LoggingServices extends UnicastRemoteObject implements LoggingServi
         super();
         try {
             // This block creates a FileHandler instance that will write to the 
-            // specified remote_app.log file in the usr/logging directory with option to append. 
+            // specified log.txt file in the usr/logging directory with option to append. 
             // NOTE: The file is written to usr/logging directory and not the project
             // working directory usr/app.
             // REF: https://docs.oracle.com/javase/8/docs/api/java/util/logging/FileHandler.html#FileHandler-java.lang.String-boolean-
@@ -50,14 +49,18 @@ public class LoggingServices extends UnicastRemoteObject implements LoggingServi
         }
     }
 
+    // Main service loop
     public static void main(String[] args) {
+        
         try {            
+            // instantiating a LoggingServices object
             LoggingServices obj = new LoggingServices();
 
+            // instantiating a Registry object and binding LoggingServices
             Registry registry = Configuration.createRegistry();
             registry.bind("LoggingServices", obj);
 
-            System.out.println("Logger service started on port 1097, waiting for clients...");
+            System.out.println("Logger service started on port 1096, waiting for clients...");
 
             String[] boundNames = registry.list();
             System.out.println("Registered services:");

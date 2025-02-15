@@ -18,6 +18,7 @@
 *	- rmiregistry must be running to start this server
 *	= MySQL
 	- orderinfo database 
+    - logging
 ******************************************************************************************************************/
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException; 
@@ -83,11 +84,16 @@ public class DeleteServices extends UnicastRemoteObject implements DeleteService
         String ReturnString = "[";	// Return string. If everything works you get an ordered pair of data
         							// if not you get an error string
 
+        // Here we create a loggingRegistry object using registry parameters.
+        // We look up the LoggingServices from the registry and create an instance of the
+        // logging service abstract interface.
         Registry loggingRegistry = LocateRegistry.getRegistry("ms_logging", 1096);
         LoggingServicesAI logger = (LoggingServicesAI) loggingRegistry.lookup("LoggingServices");
 
         try
         {
+            
+            // Logging the call made to the DeleteOrder microservice
             logger.log(Level.INFO, String.format("Method deleteOrder() called with ID:%s.", orderid), "TODO");
 
             // Here we load and initialize the JDBC connector. Essentially a static class
@@ -112,7 +118,8 @@ public class DeleteServices extends UnicastRemoteObject implements DeleteService
             // execute the update
             stmt.executeUpdate(sql);
             //ResultSet rs = stmt.executeQuery(sql);
-
+            
+            // Logging the response from the DeleteOrder microservice
             logger.log(Level.INFO, String.format("Successfully deleted order ID:%s, using insert query: %s", orderid, sql), "TODO");
 
             // Extract data from result set. Note there should only be one for this method.
@@ -127,6 +134,7 @@ public class DeleteServices extends UnicastRemoteObject implements DeleteService
             conn.close();
 
         } catch(Exception e) {
+            // Logging the error encountered by the DeleteOrder microservice
             logger.log(Level.SEVERE, "method deleteOrder() exception. Error message: " + e.toString(), "TODO");
             ReturnString = e.toString();
 

@@ -9,7 +9,6 @@
 * Description: This class provides the abstract interface for the logging micro service, LoggingServices.
 * The implementation of these abstract interfaces can be found in the LoggingService.java class.
 * This logging service is utilizing the Java RMI remote procedure calls.  
-* Parameters: None
 *
 * Internal Methods:
 *  void log(Level level, String message, String userId) - logging method for microservices to call the logging service with
@@ -24,8 +23,8 @@ import java.util.logging.Level;
 public interface LoggingServicesAI extends java.rmi.Remote
 {
 	/*******************************************************
-	* Sends log data from microservice to the LoggingService 
-	* microservice
+	* Takes a message, level, and user ID and formats a log
+	* that is then written to a file.
 	*******************************************************/
 
 	void log(Level level, String message, String userId) throws RemoteException;
