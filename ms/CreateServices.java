@@ -18,6 +18,7 @@
 *	- rmiregistry must be running to start this server
 *	= MySQL
 	- orderinfo database 
+    - logging
 ******************************************************************************************************************/
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException; 
@@ -77,6 +78,9 @@ public class CreateServices extends UnicastRemoteObject implements CreateService
 
     public String newOrder(String idate, String ifirst, String ilast, String iaddress, String iphone, String authToken) throws RemoteException, NotBoundException
     {
+        // Here we create a loggingRegistry object using registry parameters.
+        // We look up the LoggingServices from the registry and create an instance of the
+        // logging service abstract interface.
         Registry loggingRegistry = LocateRegistry.getRegistry("ms_logging", 1096);
         LoggingServicesAI logger = (LoggingServicesAI) loggingRegistry.lookup("LoggingServices");
         String username = TokenVerification.verifyToken(authToken);
@@ -93,11 +97,11 @@ public class CreateServices extends UnicastRemoteObject implements CreateService
 
         try
         {
+            // Logging the call made to the CreateOrder microservice
             logger.log(Level.INFO, "Method newOrder() called.", "TODO");
 
             // Here we load and initialize the JDBC connector. Essentially a static class
             // that is used to provide access to the database from inside this class.
-
             Class.forName(JDBC_CONNECTOR);
 
             //Open the connection to the orderinfo database
@@ -115,6 +119,8 @@ public class CreateServices extends UnicastRemoteObject implements CreateService
 
             // execute the update
             stmt.executeUpdate(sql);
+            
+            // Logging the response from the CreateOrder microservice 
             logger.log(Level.INFO, String.format("Successfully created new order, using insert query: %s", sql), "TODO");
 
             // clean up the environment
@@ -125,6 +131,7 @@ public class CreateServices extends UnicastRemoteObject implements CreateService
             conn.close();
 
         } catch(Exception e) {
+            // Logging the error encountered by the CreateOrder microservice
             logger.log(Level.SEVERE, "Method newOrder() exception. Error message: " + e.toString(), "TODO");
             ReturnString = e.toString();
         } 

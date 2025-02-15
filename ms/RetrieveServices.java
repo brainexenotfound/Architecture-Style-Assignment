@@ -19,6 +19,7 @@
 *	- rmiregistry must be running to start this server
 *	= MySQL
 	- orderinfo database 
+    - logging
 ******************************************************************************************************************/
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException; 
@@ -87,13 +88,21 @@ public class RetrieveServices extends UnicastRemoteObject implements RetrieveSer
         String ReturnString = "[";	// Return string. If everything works you get an ordered pair of data
         							// if not you get an error string
 
+<<<<<<< HEAD
+        // Here we create a loggingRegistry object using registry parameters.
+        // We look up the LoggingServices from the registry and create an instance of the
+        // logging service abstract interface.
+        Registry loggingRegistry = LocateRegistry.getRegistry("ms_logging", 1096);
+        LoggingServicesAI logger = (LoggingServicesAI) loggingRegistry.lookup("LoggingServices");
+=======
+>>>>>>> main
         
         try
         {
+            // Logging the call made to the RetreiveOrders microservice
+            logger.log(Level.INFO, "method retreiveOrders() called.", "TODO");
             // Here we load and initialize the JDBC connector. Essentially a static class
             // that is used to provide access to the database from inside this class.
-            logger.log(Level.INFO, "method retreiveOrders() called.", "TODO");
-
             Class.forName(JDBC_CONNECTOR);
 
             //Open the connection to the orderinfo database
@@ -111,6 +120,7 @@ public class RetrieveServices extends UnicastRemoteObject implements RetrieveSer
             String sql;
             sql = "SELECT * FROM orders";
             ResultSet rs = stmt.executeQuery(sql);
+            // Logging the response to from the RetreiveOrders microservice
             logger.log(Level.INFO, String.format("Successfully retreived all orders, using insert query: %s", sql), "TODO");
 
             //Extract data from result set
@@ -149,6 +159,7 @@ public class RetrieveServices extends UnicastRemoteObject implements RetrieveSer
             conn.close();
 
         } catch(Exception e) {
+            // Logging the error encountered by the RetreiveOrders microservice
             logger.log(Level.SEVERE, "Method retreiveOrders() exception. Error message: " + e.toString(), "TODO");
             ReturnString = e.toString();
         } 
@@ -162,6 +173,9 @@ public class RetrieveServices extends UnicastRemoteObject implements RetrieveSer
 
     public String retrieveOrders(String orderid, String authToken) throws RemoteException, NotBoundException
     {
+        // Here we create a loggingRegistry object using registry parameters.
+        // We look up the LoggingServices from the registry and create an instance of the
+        // logging service abstract interface.
         Registry loggingRegistry = LocateRegistry.getRegistry("ms_logging", 1096);
         LoggingServicesAI logger = (LoggingServicesAI) loggingRegistry.lookup("LoggingServices");
         String username = TokenVerification.verifyToken(authToken);
@@ -176,13 +190,13 @@ public class RetrieveServices extends UnicastRemoteObject implements RetrieveSer
         String ReturnString = "[";	// Return string. If everything works you get an ordered pair of data
         							// if not you get an error string
 
-
         try
         {
+            // Logging the call made to the RetreiveOrders microservice using orderid
             logger.log(Level.INFO, String.format("method retreiveorders(%s)", orderid), "TODO");
+            
             // Here we load and initialize the JDBC connector. Essentially a static class
             // that is used to provide access to the database from inside this class.
-
             Class.forName(JDBC_CONNECTOR);
 
             //Open the connection to the orderinfo database
@@ -200,6 +214,7 @@ public class RetrieveServices extends UnicastRemoteObject implements RetrieveSer
             String sql;
             sql = "SELECT * FROM orders where order_id=" + orderid;
             ResultSet rs = stmt.executeQuery(sql);
+            // Logging the response from the RetreiveOrders microservice using orderid
             logger.log(Level.INFO, String.format("Successfully retreived order ID:%s, using insert query: %s", orderid, sql), "TODO");
 
             // Extract data from result set. Note there should only be one for this method.
@@ -239,6 +254,7 @@ public class RetrieveServices extends UnicastRemoteObject implements RetrieveSer
             conn.close();
 
         } catch(Exception e) {
+            // Logging the error encountered by the RetreiveOrders microservice when called by orderid
             logger.log(Level.SEVERE, String.format("Method retreiveorders(%s) exception. Error message : %s", orderid, e.toString()), "TODO");
             ReturnString = e.toString();
         } 
