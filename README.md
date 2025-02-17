@@ -24,6 +24,18 @@ Please refer to the INSTALL.md
 - `OrdersUI.java`: Handles order-related UI operations.
 - `WSClientAPI.java`: Implements WebSocket communication for real-time data exchange.
 
-### Usage
-placeholder
+### Logging
+WS server operations are logged to a file named `logs.txt`. This file is generated in the server’s working directory inside the Docker container.
+
+**Location:**
+The log file is located at:
+`/usr/app/ws/logs.txt`
+within the container.
+
+**Accessing `logs.txt`:**
+
+  Run the following command from your project directory:
+  ```bash
+  docker-compose -f stack-ws.yml exec server cat /usr/app/ws/logs.txt
+
 
