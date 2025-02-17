@@ -91,15 +91,15 @@ This project contains multiple Java-based microservices for handling authenticat
 
 ```
 /AuthServices.java           # Handles authentication logic
-/AuthServicesAI.java         # AI-enhanced authentication services
+/AuthServicesAI.java         # authentication services
 /CreateServices.java         # Service for creating resources
-/CreateServicesAI.java       # AI-enhanced creation services
+/CreateServicesAI.java       # creation services
 /DeleteServices.java         # Handles resource deletion
-/DeleteServicesAI.java       # AI-enhanced deletion services
+/DeleteServicesAI.java       # deletion services
 /RetrieveServices.java       # Retrieves stored data
-/RetrieveServicesAI.java     # AI-enhanced retrieval services
+/RetrieveServicesAI.java     # retrieval services
 /LoggingServices.java        # Handles logging
-/LoggingServicesAI.java      # AI-enhanced logging services
+/LoggingServicesAI.java      # logging services
 /MSClientAPI.java            # Client API for microservices communication
 /OrdersUI.java               # UI logic for order management
 /TokenVerification.java      # Manages token verification and security
@@ -115,7 +115,7 @@ Please refer to the INSTALL.md
 ### Features
 
 - **Microservices-based** architecture for authentication and order management.
-- **AI-Enhanced Services**: Some services include AI-based optimizations.
+- **Services**: Provide order services.
 - **Logging & Monitoring** to track authentication and service operations.
 
 ### Usage
