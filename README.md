@@ -1,7 +1,7 @@
 # Project Overview
 
 ## Web Service
-This project consists of a combination of Java and JavaScript files, likely implementing a web service with client-server communication.
+This project consists of a combination of Java and JavaScript files, implementing a web service with client-server communication.
 
 ### Project Structure
 
