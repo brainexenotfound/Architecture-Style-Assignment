@@ -1,7 +1,7 @@
 # Project Overview
 
 ## Web Service
-This project consists of a combination of Java and JavaScript files, likely implementing a web service with client-server communication.
+This project consists of a combination of Java and JavaScript files, implementing a web service with client-server communication.
 
 ### Project Structure
 
@@ -166,4 +166,4 @@ Pressing 2 will prompt you for an order id. After entering an ID, you will recei
 
 Pressing 3 will prompt you for first name, last name, address, and phone. Then, it will ask you to press 'y' to create this order. After this, the order will be saved in the database.
 
-Pressing 4 will prompt you for an order id. After entering an ID, the order associated with that ID will be deleted from the database.l
+Pressing 4 will prompt you for an order id. After entering an ID, the order associated with that ID will be deleted from the database.
