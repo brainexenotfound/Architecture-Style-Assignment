@@ -25,10 +25,65 @@ Please refer to the INSTALL.md
 - `WSClientAPI.java`: Implements WebSocket communication for real-time data exchange.
 
 ### Usage
-placeholder
+This section describes how to interact with the Orders Database User Interface using Docker Compose.
 
+To start the client UI, use the following command:
 
-## Microservices Authentication & Order Management System
+```sh
+$ docker-compose -f ws.yml exec client java OrdersUI
+```
+
+Upon launching, the system presents an authentication menu:
+```
+Orders Database User Interface:
+
+Select an Option: 
+
+1: Sign up.
+2: Log in.
+3: Exit.
+```
+
+To log in, select 2 and enter your credentials:
+```
+Enter your username: evan
+Enter your password: huang
+```
+Once authenticated, you will be presented with order management options.
+
+After logging in, you can interact with the Orders Database:
+```
+Orders Database User Interface: 
+
+Select an Option: 
+
+1: Retrieve all orders in the order database.
+2: Retrieve an order by ID.
+3: Add a new order to the order database.
+4: Delete an order from the order database.
+X: Exit
+```
+
+To view all orders, select 1:
+```
+>>>> 1
+Retrieving All Orders::
+{"Error":false,"Message":"Success","Orders":[]}
+```
+If no orders exist, the Orders array will be empty.
+To retrieve a specific order, select 2:
+```
+>>>> 2
+Enter the order ID: 12
+{"Error":false,"Message":"Success","Users":[]}
+
+Press enter to continue...
+```
+If the order ID exists, the response will include order details.
+
+To exit the application, select X.
+
+## Microservices
 
 This project contains multiple Java-based microservices for handling authentication, order management, and logging.
 
