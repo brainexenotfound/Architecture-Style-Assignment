@@ -1,5 +1,7 @@
 # Project Overview
 
+Please use ws.yml/ms.yml for all docker compose actions. 
+
 ## Web Service
 This project consists of a combination of Java and JavaScript files, implementing a web service with client-server communication.
 
